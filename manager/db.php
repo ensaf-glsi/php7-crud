@@ -62,6 +62,18 @@
         $rs->closeCursor();
     }
 
+    function findOne($tableName, $idName, $idValue) {
+        $bdd = dbConnection();
+        $rs = $bdd->prepare("select * from $tableName where $idName = :$idName");
+        $rs->execute([$idName => $idValue]);
+        $value = $rs->fetch();
+        if ($value) {
+            $value = deleteIndexes($value);
+        }
+        $rs->closeCursor();
+        return $value;
+    }
+
     function deleteIndexes($entity) {
         $result = [];
         foreach ($entity as $key => $value) {
