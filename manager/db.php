@@ -11,11 +11,10 @@
             $result[htmlspecialchars($key)] = htmlspecialchars($value);
         }
         return $result;
-
     }
 
     function create($tableName, $entity) {
-        $entity = check($entity);
+        // $entity = check($entity);
         $bdd = dbConnection();
         // $rs = $bdd->prepare("insert into {tableName}(name, pu, unite) values (:name, :pu, :unite)");
         // columns = name, pu, unite
@@ -33,11 +32,13 @@
         // echo "<p>columns : $columns; values : $values</p>";
         $rs = $bdd->prepare("insert into $tableName($columns) values ($values)");
         $rs->execute($entity);
+        $lastId = $bdd->lastInsertId();
         $rs->closeCursor();
+        return $lastId;
     }
 
     function update($tableName, $entity, $idName) {
-        $entity = check($entity);
+        // $entity = check($entity);
         $bdd = dbConnection();
         // $rs = $bdd->prepare("update $tableName set name = :name, pu = :pu, unite = :unite where $idName = :$idName");
         $clauseSet = '';
@@ -66,23 +67,32 @@
         $bdd = dbConnection();
         $rs = $bdd->prepare("select * from $tableName where $idName = :$idName");
         $rs->execute([$idName => $idValue]);
-        $value = $rs->fetch();
-        if ($value) {
-            $value = deleteIndexes($value);
-        }
+        $value = $rs->fetch(PDO::FETCH_ASSOC);
+        // if ($value) {
+        //     $value = deleteIndexes($value);
+        // }
         $rs->closeCursor();
         return $value;
     }
 
-    function deleteIndexes($entity) {
-        $result = [];
-        foreach ($entity as $key => $value) {
-            if (!is_int($key)) {
-                $result[$key] = $value;
-            }
-        }
-        return $result;
+    function findAll($tableName) {
+        $bdd = dbConnection();
+        $rs = $bdd->query("select * from $tableName");
+        $list = $rs->fetchAll(PDO::FETCH_ASSOC);
+        $rs->closeCursor();
+        print_r($list);
+        return $list;
     }
+
+    // function deleteIndexes($entity) {
+    //     $result = [];
+    //     foreach ($entity as $key => $value) {
+    //         if (!is_int($key)) {
+    //             $result[$key] = $value;
+    //         }
+    //     }
+    //     return $result;
+    // }
 
 
 ?>

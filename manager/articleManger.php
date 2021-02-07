@@ -1,42 +1,47 @@
 <?php
 // on doit se connecter a la base de données
 
-    require_once('db.php');
+require_once('db.php');
 
-    // la recuperation de la liste des articles
-    function getAllArticle() {
-        $bdd = dbConnection();
-        $rs = $bdd->query("select * from article");
-        $articleList = $rs->fetchAll();
-        $rs->closeCursor();
-        return $articleList;
-    }
+// la recuperation de la liste des articles
+function getAllArticle()
+{
+    $bdd = dbConnection();
+    $rs = $bdd->query("select * from article");
+    $articleList = $rs->fetchAll(PDO::FETCH_ASSOC);
+    $rs->closeCursor();
+    return $articleList;
+}
 
-    // recuperation d'un article par son id
-    function getArticle($id) {
-        $bdd = dbConnection();
-        $rs = $bdd->prepare("select * from article where id = :id");
-        $rs->execute(['id' => $id]);
-        $value = deleteIndexes($rs->fetch());
-        $rs->closeCursor();
-        return $value;
-    }
+// recuperation d'un article par son id
+function getArticle($id)
+{
+    $bdd = dbConnection();
+    $rs = $bdd->prepare("select * from article where id = :id");
+    $rs->execute(['id' => $id]);
+    $value = $rs->fetch(PDO::FETCH_ASSOC);
+    $rs->closeCursor();
+    return $value;
+}
 
-    // insertion d'un article
-    function createArticle($article) {
-        // $rs = $bdd->prepare("insert into article(name, pu, unite) values (:name, :pu, :unite)");
-        create('article', $article);
-    }
+// insertion d'un article
+function createArticle($article)
+{
+    // $rs = $bdd->prepare("insert into article(name, pu, unite) values (:name, :pu, :unite)");
+    create('article', $article);
+}
 
-    // insertion d'un article
-    function updateArticle($article) {
-        // $rs = $bdd->prepare("update article set name = :name, pu = :pu, unite = :unite where id = :id");
-        update('article', $article, 'id');
-    }
+// insertion d'un article
+function updateArticle($article)
+{
+    // $rs = $bdd->prepare("update article set name = :name, pu = :pu, unite = :unite where id = :id");
+    update('article', $article, 'id');
+}
 
-    function deleteArticle($id) {
-        deleteEntity("article", "id", $id);
-    }
+function deleteArticle($id)
+{
+    deleteEntity("article", "id", $id);
+}
 
     // deleteArticle(5);
 
@@ -75,5 +80,3 @@
         // echo "</tr>";
     // }
     // echo "</table>";
-
-?>

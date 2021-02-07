@@ -12,6 +12,10 @@
     //     return $articleList;
     // }
 
+    function findAllUsers() {
+        return findAll('user');
+    }
+
     // recuperation d'un utilisateur par son id
     function findUserById($id) {
         $user = findOne('user', 'id', $id);
@@ -52,13 +56,14 @@
     }
 
     // createUser(
-    //     ['name' => 'zouhir', 'username' => 'zouhir@gmail.com', 'password' => '123123']
+    //     ['name' => 'ahmed', 'username' => 'ahmed@gmail.com', 'password' => '123123']
     // );
 
     // createUser(
     //     ['name' => 'abdellah', 'username' => 'abdellah@gmail.com', 'password' => 'P@ssWord/-']
     // );
 
+    findAllUsers();
     login('zouhir@gmail.com', '123123'); // correct
     login('zouhir@gmail.com', '12123r'); // mdp incorrect
     login('zouhr@gmail.com', '123123'); // username incorrect
